@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOMOEOASCENT 1.0 – 2026 | Claim Your Certificate</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-hero: #071026;
+      --bg-claim: #0d1838;
+      --bg-input: #070e22;
+      --border-subtle: rgba(255, 255, 255, 0.11);
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-hero);
+      color: #f8fafc;
+      overflow-x: hidden;
+      margin: 0;
+    }
+    .font-classic {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+    }
+    .font-bold-style {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+    }
+    .font-script {
+      font-family: 'Great Vibes', cursive;
+    }
+
+    /* Reference Hero Gradient Text */
+    .hero-gradient-text {
+      background: linear-gradient(90deg, #2563eb 0%, #6366f1 45%, #a855f7 80%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* 3D Primary Gradient Button matching campuscrewfmc.netlify.app */
+    .btn-primary-3d {
+      background: linear-gradient(90deg, #2563eb 0%, #6366f1 50%, #b855f2 100%);
+      box-shadow: 0 4px 0 #1d4ed8, 0 10px 25px -5px rgba(99, 102, 241, 0.45);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease, opacity 0.2s ease;
+    }
+    .btn-primary-3d:hover:not(:disabled) {
+      filter: brightness(1.07);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 0 #1d4ed8, 0 14px 28px -5px rgba(99, 102, 241, 0.55);
+    }
+    .btn-primary-3d:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #1d4ed8;
+    }
+    .btn-lock-muted {
+      background: linear-gradient(90deg, #2b446e 0%, #46456e 55%, #654c6b 100%);
+      box-shadow: 0 4px 0 #1e293b;
+      color: rgba(255, 255, 255, 0.78);
+      transition: all 0.25s ease;
+    }
+
+    /* LinkedIn & Instagram 3D Buttons */
+    .btn-linkedin-3d {
+      background: #1877d2;
+      box-shadow: 0 4px 0 #0d4f94;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .btn-linkedin-3d:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+    .btn-linkedin-3d:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #0d4f94;
+    }
+
+    .btn-instagram-3d {
+      background: linear-gradient(90deg, #f97316 0%, #ec4899 52%, #7c3aed 100%);
+      box-shadow: 0 4px 0 #4c1d95;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .btn-instagram-3d:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+    .btn-instagram-3d:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #4c1d95;
+    }
+
+    .btn-community-banner {
+      background: linear-gradient(90deg, #2563eb 0%, #9333ea 45%, #ec4899 75%, #f97316 100%);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .btn-community-banner:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    /* Fullscreen Lock-It-In Countdown Overlay (Screenshot 342970) */
+    .lock-overlay-bg {
+      background: linear-gradient(155deg, #1d4ed8 0%, #3730a3 38%, #6d28d9 72%, #be185d 100%);
+    }
+
+    @keyframes countPop {
+      0% { transform: scale(0.65); opacity: 0; }
+      35% { transform: scale(1.06); opacity: 1; }
+      85% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0.92); opacity: 0.25; }
+    }
+    .animate-count-pop {
+      animation: countPop 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Certificate 3D Tilt Wrapper */
+    .cert-perspective {
+      perspective: 1200px;
+    }
+    .cert-tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 0.18s ease-out, box-shadow 0.25s ease;
+      will-change: transform;
+    }
+    .cert-tilt-card.tilted-active {
+      box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.85), 0 0 35px -5px rgba(59, 130, 246, 0.35);
+    }
+
+    /* Pulsing dot */
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.55; }
+    }
+    .pulse-red-dot {
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    /* Custom Scrollbar for Caption Box */
+    textarea::-webkit-scrollbar {
+      width: 6px;
+    }
+    textarea::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+    }
+    textarea::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.22);
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+  <!-- ===================================================================== -->
+  <!-- FULLSCREEN "LOCKING IT IN" COUNTDOWN OVERLAY (Matches 342970_55623a)  -->
+  <!-- ===================================================================== -->
+  <div id="lockCountdownOverlay" class="fixed inset-0 z-50 hidden lock-overlay-bg flex-col items-center justify-center select-none">
+    <div id="countdownNumber" class="text-[120px] sm:text-[150px] font-black text-white leading-none tracking-tight animate-count-pop">
+      3
+    </div>
+    <p class="text-white/90 text-sm sm:text-base font-medium mt-3 tracking-wide">
+      Locking it in
+    </p>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- PARTICIPANT CATEGORY RADIO SHEET / MODAL (Matches 342949_55623a)      -->
+  <!-- Strictly Student, Intern, and Practitioner                            -->
+  <!-- ===================================================================== -->
+  <div id="categoryModal" class="fixed inset-0 z-40 hidden bg-black/70 backdrop-blur-sm items-center justify-center p-4">
+    <div class="w-full max-w-sm rounded-3xl bg-[#3d2522] border border-white/15 shadow-2xl overflow-hidden text-white divide-y divide-white/10">
+      <button type="button" data-category-option="Student" class="category-sheet-btn w-full flex items-center justify-between px-6 py-5 text-left text-lg font-medium hover:bg-white/5 transition">
+        <span>Student</span>
+        <span id="radio-Student" class="w-6 h-6 rounded-full border-2 border-[#f5c2b8] flex items-center justify-center">
+          <span class="w-3 h-3 rounded-full bg-[#f5c2b8]"></span>
+        </span>
+      </button>
+      <button type="button" data-category-option="Intern" class="category-sheet-btn w-full flex items-center justify-between px-6 py-5 text-left text-lg font-medium hover:bg-white/5 transition">
+        <span>Intern</span>
+        <span id="radio-Intern" class="w-6 h-6 rounded-full border-2 border-white/60 flex items-center justify-center">
+          <span class="w-3 h-3 rounded-full bg-[#f5c2b8] hidden"></span>
+        </span>
+      </button>
+      <button type="button" data-category-option="Practitioner" class="category-sheet-btn w-full flex items-center justify-between px-6 py-5 text-left text-lg font-medium hover:bg-white/5 transition">
+        <span>Practitioner</span>
+        <span id="radio-Practitioner" class="w-6 h-6 rounded-full border-2 border-white/60 flex items-center justify-center">
+          <span class="w-3 h-3 rounded-full bg-[#f5c2b8] hidden"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- TOAST NOTIFICATION                                                    -->
+  <!-- ===================================================================== -->
+  <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 px-4 py-3 rounded-xl bg-[#13204a] border border-blue-400/30 text-white text-sm font-medium shadow-2xl">
+    <span id="toastDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- TOP NAVBAR (Matches 342936_55623a)                                    -->
+  <!-- ===================================================================== -->
+  <header class="w-full border-b border-white/10 bg-[#071026]/95 sticky top-0 z-30 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <!-- Brand Pill matching CampusCrew pill -->
+        <a href="#top" id="brandHomeLink" class="inline-flex items-center px-3 py-1 rounded-full bg-[#072a28] border border-white/75 shadow-sm shrink-0">
+          <span class="font-script text-lg sm:text-xl text-white leading-none tracking-wide pt-0.5">HomoeoAscent</span>
+        </a>
+        <span class="text-slate-400 text-xs sm:text-sm truncate">
+          • <span class="text-slate-300 font-medium">HOMOEOASCENT 1.0 – 2026</span>
+        </span>
+      </div>
+
+      <a href="#claim" id="navClaimBtn" class="text-xs sm:text-sm font-semibold text-white pb-1 border-b-2 border-amber-400 hover:text-amber-300 transition shrink-0">
+        Claim certificate
+      </a>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- HERO SECTION (Matches 342936_55623a & 342937_55623a)                  -->
+  <!-- ===================================================================== -->
+  <main id="top" class="flex-1">
+    <section class="max-w-6xl mx-auto px-4 sm:px-8 pt-10 pb-14 sm:py-16">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        
+        <!-- Left Hero Copy -->
+        <div class="lg:col-span-6 space-y-5">
+          <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-[1.04]">
+            <span class="hero-gradient-text block">HOMOEOASCENT</span>
+            <span class="text-white block mt-1">1.0 – 2026.</span>
+            <span class="text-white block text-3xl sm:text-5xl mt-1">One grand seminar.</span>
+          </h1>
+
+          <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-md">
+            HOMOEOASCENT 1.0 – 2026 One Day National Seminar united students, interns &amp; practitioners at SGGU Auditorium to explore clinical application and ultra-dilution research in Homoeopathy. Your certificate is ready for your name.
+          </p>
+
+          <div class="pt-1 flex flex-wrap items-center gap-3.5">
+            <a href="#claim" id="heroClaimCta" class="btn-primary-3d inline-flex items-center justify-center px-6 py-3.5 rounded-2xl text-white font-bold text-sm sm:text-base">
+              Claim certificate
+            </a>
+
+            <div class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#111c3d] border border-white/10 text-xs sm:text-sm">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500 pulse-red-dot"></span>
+              <span id="heroClaimedCount" class="font-bold text-white tabular-nums">6,147</span>
+              <span class="text-slate-400">claimed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Hero Interactive Constellation Dot-Matrix (Matches 342936_55623a) -->
+        <div class="lg:col-span-6 flex flex-col items-start lg:items-end justify-center">
+          <div class="w-full max-w-lg">
+            <div id="constellationMatrix" class="relative w-full py-3 select-none" aria-label="Interactive participant matrix">
+              <!-- Populated by JS with exact dot grid + 4-point stars + floating 'You' pill -->
+            </div>
+
+            <!-- Legend matching 342936_55623a -->
+            <div class="flex flex-wrap items-center gap-5 mt-3 text-xs text-slate-400">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                <span>Students &amp; Interns</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                <span>Practitioners &amp; Speakers</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-300"></span>
+                <span>You</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- #CLAIM SECTION (Matches 342936, 342968, 342937, 342971)             -->
+    <!-- =================================================================== -->
+    <section id="claim" class="w-full bg-[#0d1838] border-t border-white/10 py-10 sm:py-16">
+      <div class="max-w-6xl mx-auto px-4 sm:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+
+          <!-- LEFT COLUMN: 3-Step Flow -->
+          <div class="lg:col-span-5 space-y-6">
+
+            <!-- 3-Step Progress Bar (Your details | Lock it in | Download and share) -->
+            <div class="grid grid-cols-3 gap-2.5">
+              <div>
+                <div id="stepBar1" class="h-1 rounded-full bg-blue-400 transition-colors duration-300"></div>
+                <p id="stepLabel1" class="text-[11px] sm:text-xs font-semibold text-white mt-2">Your details</p>
+              </div>
+              <div>
+                <div id="stepBar2" class="h-1 rounded-full bg-white/15 transition-colors duration-300"></div>
+                <p id="stepLabel2" class="text-[11px] sm:text-xs font-medium text-slate-400 mt-2">Lock it in</p>
+              </div>
+              <div>
+                <div id="stepBar3" class="h-1 rounded-full bg-white/15 transition-colors duration-300"></div>
+                <p id="stepLabel3" class="text-[11px] sm:text-xs font-medium text-slate-400 mt-2">Download and share</p>
+              </div>
+            </div>
+
+            <!-- =========================================================== -->
+            <!-- STEP 1 VIEW: YOUR DETAILS (Matches 342936 & 342968)         -->
+            <!-- =========================================================== -->
+            <div id="step1Container" class="space-y-5">
+              <div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                  Whose name goes on it?
+                </h2>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1.5 leading-relaxed">
+                  Type it exactly as you want it printed. Watch it land on the certificate.
+                </p>
+              </div>
+
+              <!-- Full Name Input -->
+              <div class="space-y-1.5">
+                <label for="fullNameInput" class="block text-xs sm:text-sm font-semibold text-white">
+                  Full name
+                </label>
+                <input
+                  id="fullNameInput"
+                  type="text"
+                  maxlength="48"
+                  autocomplete="name"
+                  placeholder="e.g. Priya Sharma"
+                  class="w-full px-4 py-3.5 rounded-xl bg-[#070e22] border border-white/15 text-white placeholder-slate-500 text-sm sm:text-base focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
+                />
+                <p id="printedAsHelper" class="text-xs text-slate-400 hidden pt-0.5">
+                  Printed as "<span id="printedAsValue" class="text-slate-300"></span>"
+                </p>
+              </div>
+
+              <!-- Email Input -->
+              <div class="space-y-1.5">
+                <label for="emailInput" class="block text-xs sm:text-sm font-semibold text-white">
+                  Email
+                </label>
+                <input
+                  id="emailInput"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="you@college.edu"
+                  class="w-full px-4 py-3.5 rounded-xl bg-[#070e22] border border-white/15 text-white placeholder-slate-500 text-sm sm:text-base focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition"
+                />
+                <p class="text-[11px] sm:text-xs text-slate-400">
+                  Use the email you registered with for HOMOEOASCENT 1.0.
+                </p>
+              </div>
+
+              <!-- Participant Category (Strictly Student, Intern, Practitioner) -->
+              <div class="space-y-1.5">
+                <label for="categoryTriggerBtn" class="block text-xs sm:text-sm font-semibold text-white">
+                  Participant category
+                </label>
+                <!-- Interactive Selector Trigger that opens the radio sheet or cycles -->
+                <button
+                  type="button"
+                  id="categoryTriggerBtn"
+                  class="w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-[#070e22] border border-white/15 text-white text-sm sm:text-base hover:border-blue-400/60 focus:outline-none focus:border-blue-400 transition"
+                >
+                  <span class="flex items-center gap-2.5">
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                    <span id="selectedCategoryText" class="font-medium">Student</span>
+                  </span>
+                  <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <!-- Quick 3-option pill bar for instant 1-tap switching as well -->
+                <div class="grid grid-cols-3 gap-2 pt-1">
+                  <button type="button" data-quick-cat="Student" class="quick-cat-btn py-1.5 px-2 rounded-lg text-xs font-semibold border border-blue-400 bg-[#12224d] text-white transition">
+                    Student
+                  </button>
+                  <button type="button" data-quick-cat="Intern" class="quick-cat-btn py-1.5 px-2 rounded-lg text-xs font-semibold border border-white/10 bg-[#070e22] text-slate-400 hover:text-white transition">
+                    Intern
+                  </button>
+                  <button type="button" data-quick-cat="Practitioner" class="quick-cat-btn py-1.5 px-2 rounded-lg text-xs font-semibold border border-white/10 bg-[#070e22] text-slate-400 hover:text-white transition">
+                    Practitioner
+                  </button>
+                </div>
+              </div>
+
+              <!-- Name Style (Classic | Bold | Script - Matches 342936 & 342968) -->
+              <div class="space-y-2">
+                <label class="block text-xs sm:text-sm font-semibold text-white">
+                  Name style
+                </label>
+                <div class="grid grid-cols-3 gap-3">
+                  <button
+                    type="button"
+                    id="styleBtnClassic"
+                    data-name-style="classic"
+                    class="name-style-btn flex flex-col items-center justify-center py-3 px-3 rounded-xl bg-[#13224a] border-2 border-blue-400 text-white transition"
+                  >
+                    <span class="font-classic text-lg sm:text-xl leading-tight">Aa</span>
+                    <span class="text-[11px] text-slate-300 mt-1">Classic</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    id="styleBtnBold"
+                    data-name-style="bold"
+                    class="name-style-btn flex flex-col items-center justify-center py-3 px-3 rounded-xl bg-[#070e22] border border-white/15 text-white hover:border-white/30 transition"
+                  >
+                    <span class="font-bold-style text-lg sm:text-xl leading-tight">Aa</span>
+                    <span class="text-[11px] text-slate-400 mt-1">Bold</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    id="styleBtnScript"
+                    data-name-style="script"
+                    class="name-style-btn flex flex-col items-center justify-center py-3 px-3 rounded-xl bg-[#070e22] border border-white/15 text-white hover:border-white/30 transition"
+                  >
+                    <span class="font-script text-xl sm:text-2xl leading-tight">Aa</span>
+                    <span class="text-[11px] text-slate-400 mt-1">Script</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Lock It In Button -->
+              <div class="pt-1 space-y-2.5">
+                <button
+                  type="button"
+                  id="lockItInBtn"
+                  class="w-full py-4 rounded-2xl font-bold text-sm sm:text-base btn-lock-muted"
+                >
+                  Lock it in
+                </button>
+                <p id="formValidationMsg" class="text-xs text-rose-400 hidden"></p>
+                <p class="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
+                  Double-check the spelling. This is the name people will see when you post it.
+                </p>
+              </div>
+            </div>
+
+            <!-- =========================================================== -->
+            <!-- STEP 3 VIEW: DOWNLOAD AND SHARE (Matches 342937 & 342971)   -->
+            <!-- =========================================================== -->
+            <div id="step3Container" class="hidden space-y-5">
+              <div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                  It's yours, <span id="claimedFirstName">Participant</span>.
+                </h2>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1.5 leading-relaxed">
+                  You're claim number <span id="userClaimNumber" class="text-white font-bold">6,148</span>. Download your certificate, then post it with a ready-made caption.
+                </p>
+              </div>
+
+              <!-- Primary Download Certificate Button (PNG) + Download PDF Button -->
+              <div class="space-y-2.5">
+                <button
+                  type="button"
+                  id="downloadCertPrimaryBtn"
+                  class="w-full py-4 rounded-2xl text-white font-bold text-sm sm:text-base btn-primary-3d flex items-center justify-center gap-2"
+                >
+                  <span>Download certificate</span>
+                </button>
+
+                <div class="grid grid-cols-2 gap-3 pt-0.5">
+                  <button
+                    type="button"
+                    id="downloadPngBtn"
+                    class="py-2.5 px-3 rounded-xl bg-[#070e22] hover:bg-[#101c3d] border border-white/15 text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition"
+                  >
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+                    </svg>
+                    <span>Download PNG</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    id="downloadPdfBtn"
+                    class="py-2.5 px-3 rounded-xl bg-[#070e22] hover:bg-[#101c3d] border border-white/15 text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition"
+                  >
+                    <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Download PDF</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Post on LinkedIn & Post on Instagram (Matches 342937_55623a) -->
+              <div class="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  id="postLinkedInBtn"
+                  class="btn-linkedin-3d py-3.5 px-4 rounded-2xl text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2"
+                >
+                  <span class="inline-flex items-center justify-center w-5 h-5 rounded bg-white text-[#1877d2] font-black text-xs leading-none shrink-0">in</span>
+                  <span>Post on LinkedIn</span>
+                </button>
+
+                <button
+                  type="button"
+                  id="postInstagramBtn"
+                  class="btn-instagram-3d py-3.5 px-4 rounded-2xl text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2"
+                >
+                  <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                  </svg>
+                  <span class="leading-tight text-left">Post on Instagram</span>
+                </button>
+              </div>
+
+              <!-- Share image to any app button (Matches 342937_55623a) -->
+              <button
+                type="button"
+                id="shareAnyAppBtn"
+                class="w-full py-3.5 px-4 rounded-xl bg-[#070e22] hover:bg-[#0d1736] border border-white/15 text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition"
+              >
+                <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                <span>Share image to any app</span>
+              </button>
+
+              <!-- Posting on LinkedIn Callout Box (Matches 342937_55623a) -->
+              <div class="rounded-xl bg-[#070e22] border border-white/10 border-l-4 border-l-amber-400 p-3.5 text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+                <strong class="text-white font-semibold">Posting on LinkedIn:</strong> LinkedIn doesn't let websites attach images, so add your downloaded certificate to the post that opens. Then retype the @ before JJHMC, HOMOEOASCENT and our speakers and pick each from the list so the tags link.
+              </div>
+
+              <!-- Caption Tabs (LinkedIn caption | Instagram caption) -->
+              <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    id="tabLinkedinCaption"
+                    data-caption-tab="linkedin"
+                    class="caption-tab-btn px-4 py-1.5 rounded-full text-xs font-semibold border border-white/80 bg-[#13224a] text-white transition"
+                  >
+                    LinkedIn caption
+                  </button>
+                  <button
+                    type="button"
+                    id="tabInstagramCaption"
+                    data-caption-tab="instagram"
+                    class="caption-tab-btn px-4 py-1.5 rounded-full text-xs font-semibold border border-white/15 bg-transparent text-slate-400 hover:text-white transition"
+                  >
+                    Instagram caption
+                  </button>
+                </div>
+
+                <!-- Caption Textarea -->
+                <textarea
+                  id="captionTextarea"
+                  rows="6"
+                  readonly
+                  class="w-full p-3.5 rounded-xl bg-[#070e22] border border-white/15 text-slate-200 text-xs sm:text-sm leading-relaxed focus:outline-none focus:border-blue-400 resize-y"
+                ></textarea>
+
+                <!-- Copy caption | Change name links (Matches 342937_55623a) -->
+                <div class="flex items-center justify-between text-xs sm:text-sm pt-0.5">
+                  <button
+                    type="button"
+                    id="copyCaptionBtn"
+                    class="text-blue-400 hover:text-blue-300 underline underline-offset-4 font-medium transition"
+                  >
+                    Copy caption
+                  </button>
+
+                  <button
+                    type="button"
+                    id="changeNameBtn"
+                    class="text-blue-400 hover:text-blue-300 underline underline-offset-4 font-medium transition"
+                  >
+                    Change name
+                  </button>
+                </div>
+              </div>
+
+              <!-- Join Community Gradient Banner (Matches 342937_55623a) -->
+              <a
+                href="mailto:homeoascent@gmail.com?subject=HOMOEOASCENT%201.0%20Community"
+                id="joinGroupBanner"
+                class="btn-community-banner block w-full p-4 rounded-2xl text-white shadow-lg"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="font-bold text-sm sm:text-base">Join the HOMOEOASCENT group</p>
+                    <p class="text-white/85 text-xs mt-0.5">Hear about the next seminar first</p>
+                  </div>
+                  <span class="text-lg font-bold">↗</span>
+                </div>
+              </a>
+
+              <!-- Tag these accounts (Matches 342937_55623a) -->
+              <div class="space-y-2.5 pt-2">
+                <h3 class="text-xs sm:text-sm font-bold text-white">Tag these accounts</h3>
+                <div class="grid grid-cols-2 gap-2.5">
+                  <button type="button" data-tag-copy="@JJHMC Official" class="tag-account-btn text-left p-3 rounded-xl bg-[#070e22]/80 hover:bg-[#111e42] border border-white/10 transition">
+                    <p class="text-xs font-bold text-white truncate">JJHMC Official</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">LinkedIn page</p>
+                  </button>
+                  <button type="button" data-tag-copy="@jjhmc_official" class="tag-account-btn text-left p-3 rounded-xl bg-[#070e22]/80 hover:bg-[#111e42] border border-white/10 transition">
+                    <p class="text-xs font-bold text-white truncate">@jjhmc_official</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Instagram</p>
+                  </button>
+                  <button type="button" data-tag-copy="HOMOEOASCENT 1.0" class="tag-account-btn text-left p-3 rounded-xl bg-[#070e22]/80 hover:bg-[#111e42] border border-white/10 transition">
+                    <p class="text-xs font-bold text-white truncate">HOMOEOASCENT 1.0</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">National Seminar</p>
+                  </button>
+                  <button type="button" data-tag-copy="Dr. Chetna Deep Lamba" class="tag-account-btn text-left p-3 rounded-xl bg-[#070e22]/80 hover:bg-[#111e42] border border-white/10 transition">
+                    <p class="text-xs font-bold text-white truncate">Dr. Chetna Deep Lamba</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Speaker profile</p>
+                  </button>
+                  <button type="button" data-tag-copy="Dr. Sachindra Joshi" class="tag-account-btn text-left p-3 rounded-xl bg-[#070e22]/80 hover:bg-[#111e42] border border-white/10 transition">
+                    <p class="text-xs font-bold text-white truncate">Dr. Sachindra Joshi</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Speaker · M.D (Hom.)</p>
+                  </button>
+                  <button type="button" data-tag-copy="Dr. Bhawisha Joshi" class="tag-account-btn text-left p-3 rounded-xl bg-[#070e22]/80 hover:bg-[#111e42] border border-white/10 transition">
+                    <p class="text-xs font-bold text-white truncate">Dr. Bhawisha Joshi</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Speaker · M.D (Hom.)</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: LIVE CERTIFICATE PREVIEW (Matches 342936 & 342937) -->
+          <div class="lg:col-span-7 lg:sticky lg:top-24">
+            <div class="cert-perspective">
+              <div
+                id="certTiltCard"
+                class="cert-tilt-card rounded-2xl overflow-hidden bg-black border border-white/15 shadow-2xl cursor-pointer select-none"
+              >
+                <!-- Top Black Share Callout Bar inside Certificate Card -->
+                <div class="bg-black text-center px-3 py-2.5 border-b border-white/10">
+                  <p class="text-[10px] sm:text-xs text-slate-200 leading-snug">
+                    Flaunt your Certificate on LinkedIn and other apps.<br />
+                    While sharing, Tag <strong class="text-white">@jjhmc_official</strong>, <strong class="text-white">HOMOEOASCENT 1.0</strong> and <strong class="text-white">SGGU</strong> in caption.
+                  </p>
+                </div>
+
+                <!-- High-Resolution HTML5 Certificate Canvas -->
+                <div class="relative w-full bg-[#f0f7ff]">
+                  <canvas
+                    id="certificateCanvas"
+                    width="1600"
+                    height="1131"
+                    class="w-full h-auto block"
+                  ></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Preview Footer Helper Text (Matches 342936_55623a) -->
+            <div class="flex items-center justify-between text-xs text-slate-400 mt-3 px-1">
+              <span>Live preview</span>
+              <button type="button" id="tiltToggleHintBtn" class="text-slate-400 hover:text-slate-200 transition">
+                Tap the certificate, then tilt your phone
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- FOOTER (Matches 342936_55623a & 342937_55623a)                        -->
+  <!-- ===================================================================== -->
+  <footer class="w-full bg-[#060c1e] border-t border-white/10 py-6">
+    <div class="max-w-6xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-400">
+      <p>
+        HOMOEOASCENT 1.0 – 2026: One Day National Seminar is organised at SGGU Auditorium by @jjhmc_official.
+      </p>
+      <a
+        href="mailto:homeoascent@gmail.com"
+        id="footerJoinLink"
+        class="text-slate-300 hover:text-white underline underline-offset-4 shrink-0"
+      >
+        Join the HOMOEOASCENT group
+      </a>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION LOGIC & GOOGLE DRIVE FOLDER ROUTING                       -->
+  <!-- ===================================================================== -->
+  <script>
+    /* ========================================================================
+     * GOOGLE DRIVE AUTO-SAVE CONFIGURATION (Edit directly in code)
+     * Each participant category (Student, Intern, Practitioner) routes its
+     * generated certificate PDF into its own dedicated Google Drive folder ID.
+     *
+     * Companion Google Apps Script (Deploy -> New deployment -> Web app -> Anyone):
+     * ------------------------------------------------------------------------
+     * function doPost(e) {
+     *   var data = JSON.parse(e.postData.contents);
+     *   var folderMap = {
+     *     "Student": data.folderId || "YOUR_STUDENT_DRIVE_FOLDER_ID",
+     *     "Intern": data.folderId || "YOUR_INTERN_DRIVE_FOLDER_ID",
+     *     "Practitioner": data.folderId || "YOUR_PRACTITIONER_DRIVE_FOLDER_ID"
+     *   };
+     *   var targetFolderId = folderMap[data.category] || folderMap["Student"];
+     *   var folder = DriveApp.getFolderById(targetFolderId);
+     *   var bytes = Utilities.base64Decode(data.pdfBase64);
+     *   var blob = Utilities.newBlob(bytes, "application/pdf", data.fileName);
+     *   var file = folder.createFile(blob);
+     *   return ContentService.createTextOutput(JSON.stringify({
+     *     status: "ok", fileId: file.getId(), category: data.category
+     *   })).setMimeType(ContentService.MimeType.JSON);
+     * }
+     * ======================================================================== */
+    const DRIVE_CONFIG = {
+      enabled: false, // Set to true after adding your Google Apps Script Web App URL below
+      webAppUrl: "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec",
+      folders: {
+        Student: "PASTE_STUDENT_GOOGLE_DRIVE_FOLDER_ID_HERE",
+        Intern: "PASTE_INTERN_GOOGLE_DRIVE_FOLDER_ID_HERE",
+        Practitioner: "PASTE_PRACTITIONER_GOOGLE_DRIVE_FOLDER_ID_HERE"
+      }
+    };
+
+    // Allowed Participant Categories (strictly Student, Intern, Practitioner)
+    const ALLOWED_CATEGORIES = ["Student", "Intern", "Practitioner"];
+
+    // Application State
+    const state = {
+      fullName: "",
+      email: "",
+      category: "Student",
+      nameStyle: "classic", // 'classic' | 'bold' | 'script'
+      claimedCount: 6147,
+      userClaimNum: 6147,
+      captionPlatform: "linkedin", // 'linkedin' | 'instagram'
+      isLockedIn: false,
+      tiltEnabled: true,
+      youStarIndex: 4
+    };
+
+    // Try restoring saved state from localStorage safely
+    try {
+      const saved = localStorage.getItem("homoeoascent_claim_state_v1");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.claimedCount && parsed.claimedCount >= 6147) {
+          state.claimedCount = parsed.claimedCount;
+        }
+      }
+    } catch (err) {
+      // Ignore storage access errors in sandboxed iframes
+    }
+
+    // ------------------------------------------------------------------------
+    // 1. Interactive Hero Constellation Matrix (Matches 342936_55623a)
+    // ------------------------------------------------------------------------
+    function renderConstellationMatrix() {
+      const container = document.getElementById("constellationMatrix");
+      if (!container) return;
+
+      const rows = 7;
+      const cols = 15;
+      // Special star positions (row, col, colorType)
+      const specialStars = [
+        { r: 0, c: 3, type: "purple" },
+        { r: 1, c: 7, type: "blue" },
+        { r: 1, c: 11, type: "gold", isYou: true },
+        { r: 2, c: 1, type: "blue" },
+        { r: 2, c: 5, type: "purple" },
+        { r: 2, c: 10, type: "orange" },
+        { r: 2, c: 13, type: "blue" },
+        { r: 3, c: 4, type: "blue" },
+        { r: 3, c: 8, type: "blue" },
+        { r: 3, c: 12, type: "orange" },
+        { r: 4, c: 2, type: "purple" },
+        { r: 4, c: 6, type: "blue" },
+        { r: 4, c: 11, type: "orange" },
+        { r: 4, c: 13, type: "orange" },
+        { r: 5, c: 6, type: "purple" },
+        { r: 5, c: 12, type: "red" },
+        { r: 6, c: 5, type: "blue" }
+      ];
+
+      let html = `<div class="grid gap-y-3.5 sm:gap-y-4" style="grid-template-columns: repeat(${cols}, minmax(0, 1fr));">`;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const starIdx = specialStars.findIndex(s => s.r === r && s.c === c);
+          if (starIdx !== -1) {
+            const star = specialStars[starIdx];
+            const isYou = (starIdx === state.youStarIndex);
+            let fill = "#60a5fa";
+            if (star.type === "purple") fill = "#a855f7";
+            if (star.type === "gold") fill = "#facc15";
+            if (star.type === "orange") fill = "#fb923c";
+            if (star.type === "red") fill = "#f43f5e";
+            if (isYou) fill = "#facc15";
+
+            html += `
+              <div class="relative flex items-center justify-center h-4">
+                ${isYou ? `
+                  <div class="absolute -top-7 left-1/2 -translate-x-1/2 z-10 px-2 py-0.5 rounded-full bg-amber-300 text-[#071026] font-extrabold text-[10px] leading-tight shadow-md whitespace-nowrap">
+                    You
+                    <span class="absolute left-1/2 -bottom-1 -translate-x-1/2 w-2 h-2 bg-amber-300 rotate-45"></span>
+                  </div>
+                ` : ""}
+                <button
+                  type="button"
+                  data-star-idx="${starIdx}"
+                  aria-label="Highlight participant star"
+                  class="matrix-star-btn transform hover:scale-125 transition focus:outline-none"
+                >
+                  <svg class="${isYou ? "w-5 h-5" : "w-3.5 h-3.5"}" viewBox="0 0 24 24" fill="${fill}">
+                    <path d="M12 1L14.8 9.2L23 12L14.8 14.8L12 23L9.2 14.8L1 12L9.2 9.2L12 1Z" />
+                  </svg>
+                </button>
+              </div>
+            `;
+          } else {
+            html += `
+              <div class="flex items-center justify-center h-4">
+                <span class="w-1 h-1 rounded-full bg-blue-400/55"></span>
+              </div>
+            `;
+          }
+        }
+      }
+      html += `</div>`;
+      container.innerHTML = html;
+
+      container.querySelectorAll(".matrix-star-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.getAttribute("data-star-idx") || "2", 10);
+          state.youStarIndex = idx;
+          renderConstellationMatrix();
+        });
+      });
+    }
+
+    // ------------------------------------------------------------------------
+    // 2. High-Resolution Personalized Certificate Canvas Renderer
+    //    Matches the reference visual layout in 342936 & 342937
+    // ------------------------------------------------------------------------
+    function drawSparkleStar(ctx, cx, cy, outerR, innerR) {
+      ctx.save();
+      ctx.beginPath();
+      for (let i = 0; i < 4; i++) {
+        const angleOuter = (i * Math.PI) / 2 - Math.PI / 2;
+        const angleInner = angleOuter + Math.PI / 4;
+        const xO = cx + Math.cos(angleOuter) * outerR;
+        const yO = cy + Math.sin(angleOuter) * outerR;
+        const xI = cx + Math.cos(angleInner) * innerR;
+        const yI = cy + Math.sin(angleInner) * innerR;
+        if (i === 0) ctx.moveTo(xO, yO);
+        else ctx.lineTo(xO, yO);
+        ctx.lineTo(xI, yI);
+      }
+      ctx.closePath();
+      ctx.restore();
+    }
+
+    function drawMarginDoodles(ctx, w, h) {
+      ctx.save();
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 2.4;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.globalAlpha = 0.55;
+
+      // Left-upper doodle: Medical Cross Badge / Stethoscope Frame
+      ctx.save();
+      ctx.translate(185, 390);
+      ctx.rotate(-0.22);
+      ctx.strokeRect(-42, -28, 84, 56);
+      ctx.beginPath();
+      ctx.moveTo(-18, 0); ctx.lineTo(18, 0);
+      ctx.moveTo(0, -16); ctx.lineTo(0, 16);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 44, 16, Math.PI, 0);
+      ctx.stroke();
+      ctx.restore();
+
+      // Left-lower doodle: Ascending Rocket (HomoeoAscent motif)
+      ctx.save();
+      ctx.translate(175, 760);
+      ctx.rotate(0.45);
+      ctx.beginPath();
+      ctx.moveTo(0, -32);
+      ctx.quadraticCurveTo(20, -5, 14, 24);
+      ctx.lineTo(-14, 24);
+      ctx.quadraticCurveTo(-20, -5, 0, -32);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, -4, 6, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-14, 14); ctx.lineTo(-24, 26); ctx.lineTo(-14, 24);
+      ctx.moveTo(14, 14); ctx.lineTo(24, 26); ctx.lineTo(14, 24);
+      ctx.stroke();
+      ctx.restore();
+
+      // Right-middle doodle: Precision Target Reticle (exact match to 342936)
+      ctx.save();
+      ctx.translate(1465, 535);
+      ctx.beginPath();
+      ctx.arc(0, 0, 38, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, 12, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-46, 0); ctx.lineTo(-20, 0);
+      ctx.moveTo(20, 0); ctx.lineTo(46, 0);
+      ctx.moveTo(0, -46); ctx.lineTo(0, -20);
+      ctx.moveTo(0, 20); ctx.lineTo(0, 46);
+      ctx.stroke();
+      ctx.restore();
+
+      // Right-lower doodle: Flag on Summit
+      ctx.save();
+      ctx.translate(1455, 785);
+      ctx.beginPath();
+      ctx.moveTo(-10, 26); ctx.lineTo(2, -26);
+      ctx.lineTo(28, -16); ctx.lineTo(0, -6);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(0, 28, 22, 6, -0.15, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      // Decorative clouds on edges (matching 342936)
+      ctx.fillStyle = "#94a3b8";
+      ctx.globalAlpha = 0.45;
+      // Bottom-left cloud
+      ctx.beginPath();
+      ctx.arc(45, 975, 22, Math.PI, 0);
+      ctx.arc(75, 968, 28, Math.PI, 0);
+      ctx.arc(105, 976, 20, Math.PI, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Right-upper cloud
+      ctx.beginPath();
+      ctx.arc(1495, 365, 20, Math.PI, 0);
+      ctx.arc(1525, 356, 26, Math.PI, 0);
+      ctx.arc(1555, 365, 18, Math.PI, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Center-bottom small overlapping squares (matching 342936)
+      ctx.globalAlpha = 0.5;
+      ctx.strokeRect(755, 935, 22, 22);
+      ctx.strokeRect(772, 952, 24, 24);
+
+      ctx.restore();
+    }
+
+    function renderCertificateCanvas() {
+      const canvas = document.getElementById("certificateCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const W = canvas.width;   // 1600
+      const H = canvas.height;  // 1131
+
+      ctx.clearRect(0, 0, W, H);
+
+      // 1. Background Soft Ice-Blue Gradient (Matching 342936 certificate card)
+      const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+      bgGrad.addColorStop(0, "#e6f2ff");
+      bgGrad.addColorStop(0.5, "#f3f8ff");
+      bgGrad.addColorStop(1, "#e8f3ff");
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Subtle soft radial glow in center
+      const centerGlow = ctx.createRadialGradient(W * 0.5, H * 0.48, 40, W * 0.5, H * 0.48, 650);
+      centerGlow.addColorStop(0, "rgba(255, 255, 255, 0.92)");
+      centerGlow.addColorStop(1, "rgba(255, 255, 255, 0)");
+      ctx.fillStyle = centerGlow;
+      ctx.fillRect(0, 0, W, H);
+
+      // 2. Margin Line-Art Doodles
+      drawMarginDoodles(ctx, W, H);
+
+      // 3. Top-Left Multicolor Seminar/College Brand Mark ("JJHMC" in 4 colors like reference)
+      ctx.save();
+      ctx.font = "800 38px 'Inter', sans-serif";
+      const brandLetters = [
+        { ch: "J", color: "#4285F4" },
+        { ch: "J", color: "#EA4335" },
+        { ch: "H", color: "#FBBC05" },
+        { ch: "M", color: "#4285F4" },
+        { ch: "C", color: "#34A853" }
+      ];
+      let bx = 72;
+      const by = 88;
+      brandLetters.forEach(item => {
+        ctx.fillStyle = item.color;
+        ctx.fillText(item.ch, bx, by);
+        bx += ctx.measureText(item.ch).width + 1;
+      });
+      ctx.font = "600 18px 'Inter', sans-serif";
+      ctx.fillStyle = "#475569";
+      ctx.fillText("• SGGU", bx + 10, by - 4);
+      ctx.restore();
+
+      // 4. Top-Right Dark Pill Badge ("HomoeoAscent" matching CampusCrew badge in 342936)
+      ctx.save();
+      const pillX = 1285, pillY = 48, pillW = 245, pillH = 62, pillR = 31;
+      ctx.beginPath();
+      ctx.roundRect(pillX, pillY, pillW, pillH, pillR);
+      ctx.fillStyle = "#082f2c";
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#0f172a";
+      ctx.stroke();
+
+      ctx.font = "36px 'Great Vibes', cursive";
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("HomoeoAscent", pillX + pillW / 2, pillY + pillH / 2 + 3);
+      ctx.restore();
+
+      // 5. Center Royal-Blue Title Banner + 4-Point Multicolor Star (Exact match to 342936)
+      ctx.save();
+      const bannerX = 430, bannerY = 120, bannerW = 780, bannerH = 152, bannerR = 18;
+      const bannerGrad = ctx.createLinearGradient(bannerX, bannerY, bannerX + bannerW, bannerY + bannerH);
+      bannerGrad.addColorStop(0, "#3b82f6");
+      bannerGrad.addColorStop(0.55, "#2563eb");
+      bannerGrad.addColorStop(1, "#1d4ed8");
+      ctx.beginPath();
+      ctx.roundRect(bannerX, bannerY, bannerW, bannerH, bannerR);
+      ctx.fillStyle = bannerGrad;
+      ctx.fill();
+
+      // White outer cutout for 4-point star on left edge of banner
+      const starCx = 425, starCy = 196;
+      drawSparkleStar(ctx, starCx, starCy, 118, 34);
+      ctx.fillStyle = "#eef6ff";
+      ctx.fill();
+
+      // Multicolor 4-point star
+      drawSparkleStar(ctx, starCx, starCy, 98, 27);
+      const starGrad = ctx.createLinearGradient(starCx - 85, starCy - 85, starCx + 85, starCy + 85);
+      starGrad.addColorStop(0, "#ef4444");
+      starGrad.addColorStop(0.32, "#f59e0b");
+      starGrad.addColorStop(0.62, "#10b981");
+      starGrad.addColorStop(1, "#2563eb");
+      ctx.fillStyle = starGrad;
+      ctx.fill();
+
+      // Banner Headline Text
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.font = "700 44px 'Inter', sans-serif";
+      ctx.fillText("HOMOEOASCENT 1.0 – 2026", bannerX + bannerW / 2 + 28, bannerY + 64);
+      ctx.font = "600 34px 'Inter', sans-serif";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+      ctx.fillText("One Day National Seminar", bannerX + bannerW / 2 + 28, bannerY + 118);
+      ctx.restore();
+
+      // 6. "This certificate is proudly presented to"
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "700 29px 'Inter', sans-serif";
+      ctx.fillText("This certificate is proudly presented to", W / 2, 415);
+
+      // 7. Participant Name (Live Preview in Classic, Bold, or Script)
+      const displayName = state.fullName.trim();
+      const hasName = displayName.length > 0;
+      const textToDraw = hasName ? displayName : "Your Name";
+
+      // Auto-scale font size for long names
+      let baseSize = 74;
+      if (state.nameStyle === "script") baseSize = 86;
+      if (state.nameStyle === "bold") baseSize = 68;
+      if (textToDraw.length > 22) {
+        baseSize = Math.max(42, Math.floor(baseSize * (22 / textToDraw.length)));
+      }
+
+      if (!hasName) {
+        ctx.font = `italic 600 ${baseSize}px 'Playfair Display', Georgia, serif`;
+        ctx.fillStyle = "#cbd5e1";
+      } else if (state.nameStyle === "classic") {
+        ctx.font = `italic 600 ${baseSize}px 'Playfair Display', Georgia, serif`;
+        ctx.fillStyle = "#0f172a";
+      } else if (state.nameStyle === "bold") {
+        ctx.font = `800 ${baseSize}px 'Inter', sans-serif`;
+        ctx.fillStyle = "#0f172a";
+      } else {
+        ctx.font = `400 ${baseSize}px 'Great Vibes', cursive`;
+        ctx.fillStyle = "#0f172a";
+      }
+
+      ctx.fillText(textToDraw, W / 2, 505);
+
+      // Horizontal rule below name
+      ctx.strokeStyle = "#93c5fd";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(395, 535);
+      ctx.lineTo(1205, 535);
+      ctx.stroke();
+
+      // Participant Category Pill Badge (Student / Intern / Practitioner)
+      const catLabel = `CATEGORY: ${state.category.toUpperCase()}`;
+      ctx.font = "700 18px 'Inter', sans-serif";
+      const catW = ctx.measureText(catLabel).width + 44;
+      ctx.fillStyle = "#dbeafe";
+      ctx.beginPath();
+      ctx.roundRect(W / 2 - catW / 2, 552, catW, 34, 17);
+      ctx.fill();
+      ctx.strokeStyle = "#93c5fd";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.fillStyle = "#1d4ed8";
+      ctx.fillText(catLabel, W / 2, 575);
+      ctx.restore();
+
+      // 8. Recognition Citation Body Paragraph (Matching 342936 & Seminar Details in 342938)
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#334155";
+      ctx.font = "500 23px 'Inter', sans-serif";
+      ctx.fillText(
+        `in recognition of active participation as a ${state.category} in`,
+        W / 2,
+        625
+      );
+
+      ctx.font = "700 24px 'Inter', sans-serif";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(
+        "HOMOEOASCENT 1.0 – 2026: One Day National Seminar, organised by @jjhmc_official",
+        W / 2,
+        660
+      );
+
+      ctx.font = "500 23px 'Inter', sans-serif";
+      ctx.fillStyle = "#334155";
+      ctx.fillText(
+        "at SGGU Auditorium featuring Dr. Chetna Deep Lamba, Dr. Sachindra Joshi & Dr. Bhawisha Joshi.",
+        W / 2,
+        695
+      );
+
+      ctx.font = "600 23px 'Inter', sans-serif";
+      ctx.fillStyle = "#1e293b";
+      ctx.fillText(
+        "HOMOEOASCENT proudly recognises your dedication to clinical practice & research in Homoeopathy.",
+        W / 2,
+        748
+      );
+      ctx.restore();
+
+      // 9. Bottom Row: Date (Left) & Signature (Right) & Micro-footer (Center)
+      ctx.save();
+      // Left: Date
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "700 24px 'Inter', sans-serif";
+      ctx.fillText("Date", 465, 882);
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(425, 890);
+      ctx.lineTo(505, 890);
+      ctx.stroke();
+      ctx.font = "600 22px 'Inter', sans-serif";
+      ctx.fillStyle = "#334155";
+      ctx.fillText("21-DEC-2025 / 2026", 465, 920);
+
+      // Right: Signature (Green script matching 342936)
+      ctx.font = "44px 'Great Vibes', cursive";
+      ctx.fillStyle = "#10b981";
+      ctx.fillText("Dr. Vijay Patel", 1125, 882);
+      ctx.strokeStyle = "#6ee7b7";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(990, 894);
+      ctx.lineTo(1260, 894);
+      ctx.stroke();
+      ctx.font = "700 21px 'Inter', sans-serif";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText("Organizing Committee, HOMOEOASCENT", 1125, 922);
+
+      // Bottom Center Stats Line
+      ctx.font = "600 18px 'Inter', sans-serif";
+      ctx.fillStyle = "#475569";
+      ctx.fillText(
+        `Clinical Research in Homoeopathy • SGGU Auditorium • Claim #${state.userClaimNum.toLocaleString("en-IN")}`,
+        W / 2,
+        1032
+      );
+      ctx.restore();
+    }
+
+    // ------------------------------------------------------------------------
+    // 3. Social Captions Generator (LinkedIn & Instagram)
+    // ------------------------------------------------------------------------
+    function getGeneratedCaption(platform) {
+      const name = state.fullName.trim() || "Participant";
+      const cat = state.category;
+
+      if (platform === "instagram") {
+        return `Proud to receive my official Certificate of Participation as a ${cat} at HOMOEOASCENT 1.0 – 2026 (One Day National Seminar on Clinical Research in Homoeopathy) at SGGU Auditorium! 🎓✨\n\nGrateful for the clinical pearls and ultra-dilution research insights from Dr. Chetna Deep Lamba, Dr. Sachindra Joshi & Dr. Bhawisha Joshi.\n\n"One seminar can change your vision, one mentor can change your practice!" 💡\n\nTagging: @jjhmc_official\n#HOMOEOASCENT #Homoeopathy #ClinicalResearch #JJHMC #SGGU #MedicalSeminar #HomoeoAscent2026`;
+      }
+
+      return `I'm proud to share my Certificate of Participation as a ${cat} at HOMOEOASCENT 1.0 – 2026: One Day National Seminar on Clinical Research in Homoeopathy! 🚀\n\nHOMOEOASCENT 1.0 brought together students, interns, practitioners, and researchers at SGGU Auditorium to explore the clinical application of Homoeopathy and critically evaluate the scientific basis of ultra-dilution.\n\nThank you @JJHMC Official and our eminent speakers Dr. Chetna Deep Lamba, Dr. Sachindra Joshi [M.D (Hom.)], and Dr. Bhawisha Joshi [M.D (Hom.)] for an inspiring day of live case discussions and therapeutic insights.\n\n"One seminar can change your vision, one mentor can change your practice!"\n\n#HOMOEOASCENT #Homoeopathy #ClinicalResearch #JJHMC #SGGU #MedicalEducation #Healthcare`;
+    }
+
+    function updateCaptionBox() {
+      const textarea = document.getElementById("captionTextarea");
+      if (!textarea) return;
+      textarea.value = getGeneratedCaption(state.captionPlatform);
+    }
+
+    // ------------------------------------------------------------------------
+    // 4. Category Selection (Student, Intern, Practitioner ONLY)
+    // ------------------------------------------------------------------------
+    function selectCategory(cat) {
+      if (!ALLOWED_CATEGORIES.includes(cat)) return;
+      state.category = cat;
+
+      const labelEl = document.getElementById("selectedCategoryText");
+      if (labelEl) labelEl.textContent = cat;
+
+      // Update modal radio indicators
+      ALLOWED_CATEGORIES.forEach(option => {
+        const radioOuter = document.getElementById(`radio-${option}`);
+        if (!radioOuter) return;
+        const innerDot = radioOuter.querySelector("span");
+        if (option === cat) {
+          radioOuter.className = "w-6 h-6 rounded-full border-2 border-[#f5c2b8] flex items-center justify-center";
+          if (innerDot) innerDot.classList.remove("hidden");
+        } else {
+          radioOuter.className = "w-6 h-6 rounded-full border-2 border-white/60 flex items-center justify-center";
+          if (innerDot) innerDot.classList.add("hidden");
+        }
+      });
+
+      // Update quick-select pills
+      document.querySelectorAll(".quick-cat-btn").forEach(btn => {
+        const bCat = btn.getAttribute("data-quick-cat");
+        if (bCat === cat) {
+          btn.className = "quick-cat-btn py-1.5 px-2 rounded-lg text-xs font-semibold border border-blue-400 bg-[#12224d] text-white transition";
+        } else {
+          btn.className = "quick-cat-btn py-1.5 px-2 rounded-lg text-xs font-semibold border border-white/10 bg-[#070e22] text-slate-400 hover:text-white transition";
+        }
+      });
+
+      renderCertificateCanvas();
+      updateCaptionBox();
+    }
+
+    // ------------------------------------------------------------------------
+    // 5. PDF Generation & Automatic Google Drive Folder Upload
+    // ------------------------------------------------------------------------
+    function buildCertificatePdfInstance() {
+      const canvas = document.getElementById("certificateCanvas");
+      if (!canvas || !window.jspdf || !window.jspdf.jsPDF) return null;
+      const { jsPDF } = window.jspdf;
+      // A4 Landscape in mm: 297 x 210
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4"
+      });
+      const imgData = canvas.toDataURL("image/png", 1.0);
+      pdf.addImage(imgData, "PNG", 0, 0, 297, 210);
+      return pdf;
+    }
+
+    function getCleanFileName(ext) {
+      const safeName = (state.fullName.trim() || "Participant")
+        .replace(/[^a-zA-Z0-9_-]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+      return `HOMOEOASCENT_1.0_2026_${state.category}_${safeName}.${ext}`;
+    }
+
+    async function uploadCertificatePdfToDrive() {
+      if (!DRIVE_CONFIG.enabled || !DRIVE_CONFIG.webAppUrl || DRIVE_CONFIG.webAppUrl.includes("YOUR_DEPLOYMENT_ID")) {
+        return;
+      }
+      try {
+        const pdf = buildCertificatePdfInstance();
+        if (!pdf) return;
+        const dataUri = pdf.output("datauristring");
+        const base64Pdf = dataUri.split(",")[1] || "";
+        const targetFolderId = DRIVE_CONFIG.folders[state.category] || DRIVE_CONFIG.folders.Student;
+
+        const payload = {
+          eventName: "HOMOEOASCENT 1.0 – 2026",
+          fullName: state.fullName.trim(),
+          email: state.email.trim(),
+          category: state.category, // Strictly 'Student', 'Intern', or 'Practitioner'
+          folderId: targetFolderId,
+          claimNumber: state.userClaimNum,
+          fileName: getCleanFileName("pdf"),
+          pdfBase64: base64Pdf,
+          timestamp: new Date().toISOString()
+        };
+
+        await fetch(DRIVE_CONFIG.webAppUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        // Silent background fail so user flow is never interrupted
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // 6. Download PNG, Download PDF, Copy Caption & Share Handlers
+    // ------------------------------------------------------------------------
+    function showToast(msg) {
+      const banner = document.getElementById("toastBanner");
+      const text = document.getElementById("toastMessage");
+      if (!banner || !text) return;
+      text.textContent = msg;
+      banner.classList.remove("hidden");
+      banner.classList.add("flex");
+      if (window._toastTimer) clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        banner.classList.add("hidden");
+        banner.classList.remove("flex");
+      }, 3200);
+    }
+
+    function copyTextToClipboard(text, successMsg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(successMsg || "Copied to clipboard!");
+        }).catch(() => {
+          fallbackCopy(text, successMsg);
+        });
+      } else {
+        fallbackCopy(text, successMsg);
+      }
+    }
+
+    function fallbackCopy(text, successMsg) {
+      const temp = document.createElement("textarea");
+      temp.value = text;
+      temp.style.position = "fixed";
+      temp.style.opacity = "0";
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      try {
+        document.execCommand("copy");
+        showToast(successMsg || "Copied to clipboard!");
+      } catch (err) {
+        showToast("Select the text box to copy manually.");
+      }
+      document.body.removeChild(temp);
+    }
+
+    function downloadCertificatePng() {
+      renderCertificateCanvas();
+      const canvas = document.getElementById("certificateCanvas");
+      if (!canvas) return;
+      const dataUrl = canvas.toDataURL("image/png", 1.0);
+      const link = document.createElement("a");
+      link.download = getCleanFileName("png");
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast(`Downloaded ${getCleanFileName("png")}`);
+    }
+
+    function downloadCertificatePdf() {
+      renderCertificateCanvas();
+      const pdf = buildCertificatePdfInstance();
+      if (!pdf) {
+        downloadCertificatePng();
+        return;
+      }
+      const fileName = getCleanFileName("pdf");
+      pdf.save(fileName);
+      showToast(`Downloaded ${fileName}`);
+    }
+
+    async function shareCertificateToAnyApp() {
+      renderCertificateCanvas();
+      const canvas = document.getElementById("certificateCanvas");
+      if (!canvas) return;
+      const caption = getGeneratedCaption(state.captionPlatform);
+
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          downloadCertificatePng();
+          return;
+        }
+        const file = new File([blob], getCleanFileName("png"), { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              title: "HOMOEOASCENT 1.0 – 2026 Certificate",
+              text: caption,
+              files: [file]
+            });
+            return;
+          } catch (err) {
+            if (err && err.name === "AbortError") return;
+          }
+        }
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "HOMOEOASCENT 1.0 – 2026 Certificate",
+              text: caption
+            });
+            return;
+          } catch (err) {
+            if (err && err.name === "AbortError") return;
+          }
+        }
+        // Fallback when Web Share API is blocked by desktop/iframe
+        downloadCertificatePng();
+        copyTextToClipboard(caption, "Certificate downloaded & caption copied for sharing!");
+      }, "image/png");
+    }
+
+    // ------------------------------------------------------------------------
+    // 7. Step Transitions (Step 1 -> Step 2 Countdown -> Step 3)
+    // ------------------------------------------------------------------------
+    function updateStepIndicator(step) {
+      const b1 = document.getElementById("stepBar1");
+      const b2 = document.getElementById("stepBar2");
+      const b3 = document.getElementById("stepBar3");
+      const l1 = document.getElementById("stepLabel1");
+      const l2 = document.getElementById("stepLabel2");
+      const l3 = document.getElementById("stepLabel3");
+
+      if (step === 1) {
+        b1.className = "h-1 rounded-full bg-blue-400 transition-colors duration-300";
+        b2.className = "h-1 rounded-full bg-white/15 transition-colors duration-300";
+        b3.className = "h-1 rounded-full bg-white/15 transition-colors duration-300";
+        l1.className = "text-[11px] sm:text-xs font-semibold text-white mt-2";
+        l2.className = "text-[11px] sm:text-xs font-medium text-slate-400 mt-2";
+        l3.className = "text-[11px] sm:text-xs font-medium text-slate-400 mt-2";
+      } else if (step === 3) {
+        // Exact match to 342937_55623a: Bars 1 & 2 green, Bar 3 bright blue/indigo
+        b1.className = "h-1 rounded-full bg-emerald-400 transition-colors duration-300";
+        b2.className = "h-1 rounded-full bg-emerald-400 transition-colors duration-300";
+        b3.className = "h-1 rounded-full bg-blue-400 transition-colors duration-300";
+        l1.className = "text-[11px] sm:text-xs font-medium text-slate-400 mt-2";
+        l2.className = "text-[11px] sm:text-xs font-medium text-slate-400 mt-2";
+        l3.className = "text-[11px] sm:text-xs font-semibold text-white mt-2";
+      }
+    }
+
+    function triggerLockItInFlow() {
+      const nameVal = state.fullName.trim();
+      const emailVal = state.email.trim();
+      const msgEl = document.getElementById("formValidationMsg");
+
+      if (!nameVal) {
+        if (msgEl) {
+          msgEl.textContent = "Please enter your full name as you want it printed on the certificate.";
+          msgEl.classList.remove("hidden");
+        }
+        document.getElementById("fullNameInput").focus();
+        return;
+      }
+
+      if (!emailVal || !emailVal.includes("@")) {
+        if (msgEl) {
+          msgEl.textContent = "Please enter the valid email address you registered with.";
+          msgEl.classList.remove("hidden");
+        }
+        document.getElementById("emailInput").focus();
+        return;
+      }
+
+      if (msgEl) msgEl.classList.add("hidden");
+
+      // Show Full-Screen 3 -> 2 -> 1 Countdown Overlay (Matches 342970_55623a)
+      const overlay = document.getElementById("lockCountdownOverlay");
+      const countNum = document.getElementById("countdownNumber");
+      if (!overlay || !countNum) return;
+
+      overlay.classList.remove("hidden");
+      overlay.classList.add("flex");
+
+      let currentCount = 3;
+      countNum.textContent = String(currentCount);
+      countNum.classList.remove("animate-count-pop");
+      void countNum.offsetWidth;
+      countNum.classList.add("animate-count-pop");
+
+      if (window._lockCountdownInterval) clearInterval(window._lockCountdownInterval);
+      window._lockCountdownInterval = setInterval(() => {
+        currentCount -= 1;
+        if (currentCount >= 1) {
+          countNum.textContent = String(currentCount);
+          countNum.classList.remove("animate-count-pop");
+          void countNum.offsetWidth;
+          countNum.classList.add("animate-count-pop");
+        } else {
+          clearInterval(window._lockCountdownInterval);
+          completeLockInTransition();
+        }
+      }, 780);
+    }
+
+    function completeLockInTransition() {
+      const overlay = document.getElementById("lockCountdownOverlay");
+      if (overlay) {
+        overlay.classList.add("hidden");
+        overlay.classList.remove("flex");
+      }
+
+      state.claimedCount += 1;
+      state.userClaimNum = state.claimedCount;
+      state.isLockedIn = true;
+
+      try {
+        localStorage.setItem("homoeoascent_claim_state_v1", JSON.stringify({
+          claimedCount: state.claimedCount
+        }));
+      } catch (err) {
+        // Ignore storage error
+      }
+
+      // Update counters & first name heading
+      const heroCountEl = document.getElementById("heroClaimedCount");
+      if (heroCountEl) heroCountEl.textContent = state.claimedCount.toLocaleString("en-IN");
+
+      const claimNumEl = document.getElementById("userClaimNumber");
+      if (claimNumEl) claimNumEl.textContent = state.userClaimNum.toLocaleString("en-IN");
+
+      const firstName = state.fullName.trim().split(/\s+/)[0] || "Participant";
+      const firstNameEl = document.getElementById("claimedFirstName");
+      if (firstNameEl) firstNameEl.textContent = firstName;
+
+      // Re-render certificate with updated claim number and update captions
+      renderCertificateCanvas();
+      updateCaptionBox();
+
+      // Switch left column from Step 1 to Step 3
+      document.getElementById("step1Container").classList.add("hidden");
+      document.getElementById("step3Container").classList.remove("hidden");
+      updateStepIndicator(3);
+
+      // Silently upload PDF to the corresponding category Drive folder (Student / Intern / Practitioner)
+      uploadCertificatePdfToDrive();
+    }
+
+    // ------------------------------------------------------------------------
+    // 8. Wire All Event Listeners on DOM Ready
+    // ------------------------------------------------------------------------
+    window.addEventListener("DOMContentLoaded", () => {
+      renderConstellationMatrix();
+      renderCertificateCanvas();
+      updateCaptionBox();
+
+      const fullNameInput = document.getElementById("fullNameInput");
+      const emailInput = document.getElementById("emailInput");
+      const printedHelper = document.getElementById("printedAsHelper");
+      const printedVal = document.getElementById("printedAsValue");
+      const lockBtn = document.getElementById("lockItInBtn");
+
+      function updateLockButtonState() {
+        const hasName = state.fullName.trim().length > 0;
+        const hasEmail = state.email.trim().includes("@");
+        if (hasName && hasEmail) {
+          lockBtn.className = "w-full py-4 rounded-2xl text-white font-bold text-sm sm:text-base btn-primary-3d";
+        } else {
+          lockBtn.className = "w-full py-4 rounded-2xl font-bold text-sm sm:text-base btn-lock-muted";
+        }
+      }
+
+      fullNameInput.addEventListener("input", (e) => {
+        state.fullName = e.target.value;
+        const trimmed = state.fullName.trim();
+        if (trimmed.length > 0) {
+          printedVal.textContent = trimmed;
+          printedHelper.classList.remove("hidden");
+        } else {
+          printedHelper.classList.add("hidden");
+        }
+        updateLockButtonState();
+        renderCertificateCanvas();
+      });
+
+      emailInput.addEventListener("input", (e) => {
+        state.email = e.target.value;
+        updateLockButtonState();
+      });
+
+      // Category Modal Open / Close
+      const categoryModal = document.getElementById("categoryModal");
+      const categoryTriggerBtn = document.getElementById("categoryTriggerBtn");
+
+      categoryTriggerBtn.addEventListener("click", () => {
+        categoryModal.classList.remove("hidden");
+        categoryModal.classList.add("flex");
+      });
+
+      categoryModal.addEventListener("click", (e) => {
+        if (e.target === categoryModal) {
+          categoryModal.classList.add("hidden");
+          categoryModal.classList.remove("flex");
+        }
+      });
+
+      document.querySelectorAll(".category-sheet-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const chosen = btn.getAttribute("data-category-option");
+          selectCategory(chosen);
+          categoryModal.classList.add("hidden");
+          categoryModal.classList.remove("flex");
+        });
+      });
+
+      document.querySelectorAll(".quick-cat-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const chosen = btn.getAttribute("data-quick-cat");
+          selectCategory(chosen);
+        });
+      });
+
+      // Name Style Buttons (Classic | Bold | Script)
+      document.querySelectorAll(".name-style-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const style = btn.getAttribute("data-name-style");
+          state.nameStyle = style;
+
+          document.querySelectorAll(".name-style-btn").forEach(b => {
+            if (b.getAttribute("data-name-style") === style) {
+              b.className = "name-style-btn flex flex-col items-center justify-center py-3 px-3 rounded-xl bg-[#13224a] border-2 border-blue-400 text-white transition";
+            } else {
+              b.className = "name-style-btn flex flex-col items-center justify-center py-3 px-3 rounded-xl bg-[#070e22] border border-white/15 text-white hover:border-white/30 transition";
+            }
+          });
+
+          renderCertificateCanvas();
+        });
+      });
+
+      // Lock it in button
+      lockBtn.addEventListener("click", triggerLockItInFlow);
+
+      // Step 3 Download Buttons (Primary + PNG + PDF)
+      document.getElementById("downloadCertPrimaryBtn").addEventListener("click", downloadCertificatePng);
+      document.getElementById("downloadPngBtn").addEventListener("click", downloadCertificatePng);
+      document.getElementById("downloadPdfBtn").addEventListener("click", downloadCertificatePdf);
+
+      // Social Share Buttons
+      document.getElementById("postLinkedInBtn").addEventListener("click", () => {
+        state.captionPlatform = "linkedin";
+        updateCaptionBox();
+        const caption = getGeneratedCaption("linkedin");
+        copyTextToClipboard(caption, "LinkedIn caption copied! Attach your certificate in LinkedIn.");
+        window.open("https://www.linkedin.com/feed/?shareActive=true", "_blank", "noopener,noreferrer");
+      });
+
+      document.getElementById("postInstagramBtn").addEventListener("click", () => {
+        state.captionPlatform = "instagram";
+        updateCaptionBox();
+        const caption = getGeneratedCaption("instagram");
+        copyTextToClipboard(caption, "Instagram caption copied! Opening Instagram...");
+        window.open("https://www.instagram.com/", "_blank", "noopener,noreferrer");
+      });
+
+      document.getElementById("shareAnyAppBtn").addEventListener("click", shareCertificateToAnyApp);
+
+      // Caption Tabs (LinkedIn caption | Instagram caption)
+      document.querySelectorAll(".caption-tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const tab = btn.getAttribute("data-caption-tab");
+          state.captionPlatform = tab;
+          document.querySelectorAll(".caption-tab-btn").forEach(b => {
+            if (b.getAttribute("data-caption-tab") === tab) {
+              b.className = "caption-tab-btn px-4 py-1.5 rounded-full text-xs font-semibold border border-white/80 bg-[#13224a] text-white transition";
+            } else {
+              b.className = "caption-tab-btn px-4 py-1.5 rounded-full text-xs font-semibold border border-white/15 bg-transparent text-slate-400 hover:text-white transition";
+            }
+          });
+          updateCaptionBox();
+        });
+      });
+
+      // Copy Caption & Change Name
+      const copyCaptionBtn = document.getElementById("copyCaptionBtn");
+      copyCaptionBtn.addEventListener("click", () => {
+        const text = document.getElementById("captionTextarea").value;
+        copyTextToClipboard(text, "Caption copied to clipboard!");
+        copyCaptionBtn.textContent = "Copied! ✓";
+        setTimeout(() => {
+          copyCaptionBtn.textContent = "Copy caption";
+        }, 2000);
+      });
+
+      document.getElementById("changeNameBtn").addEventListener("click", () => {
+        document.getElementById("step3Container").classList.add("hidden");
+        document.getElementById("step1Container").classList.remove("hidden");
+        updateStepIndicator(1);
+        document.getElementById("fullNameInput").focus();
+      });
+
+      // Tag these accounts click-to-copy
+      document.querySelectorAll(".tag-account-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const handle = btn.getAttribute("data-tag-copy");
+          copyTextToClipboard(handle, `Copied tag "${handle}"!`);
+        });
+      });
+
+      // Interactive 3D Tilt on Certificate Card
+      const tiltCard = document.getElementById("certTiltCard");
+      const tiltHintBtn = document.getElementById("tiltToggleHintBtn");
+
+      function applyCardTilt(clientX, clientY) {
+        const rect = tiltCard.getBoundingClientRect();
+        const x = (clientX - rect.left) / rect.width - 0.5;
+        const y = (clientY - rect.top) / rect.height - 0.5;
+        const rotY = (x * 14).toFixed(2);
+        const rotX = (-y * 12).toFixed(2);
+        tiltCard.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.01, 1.01, 1.01)`;
+        tiltCard.classList.add("tilted-active");
+      }
+
+      function resetCardTilt() {
+        tiltCard.style.transform = "rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+        tiltCard.classList.remove("tilted-active");
+      }
+
+      tiltCard.addEventListener("mousemove", (e) => {
+        applyCardTilt(e.clientX, e.clientY);
+      });
+      tiltCard.addEventListener("mouseleave", resetCardTilt);
+
+      tiltCard.addEventListener("touchmove", (e) => {
+        if (e.touches && e.touches[0]) {
+          applyCardTilt(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+      tiltCard.addEventListener("touchend", resetCardTilt);
+
+      tiltCard.addEventListener("click", () => {
+        tiltCard.style.transform = "rotateX(5deg) rotateY(-7deg) scale3d(1.02, 1.02, 1.02)";
+        tiltCard.classList.add("tilted-active");
+        setTimeout(resetCardTilt, 650);
+      });
+
+      tiltHintBtn.addEventListener("click", () => {
+        tiltCard.click();
+        showToast("Tilt active! Move your cursor or tilt your phone over the certificate.");
+      });
+
+      // Re-render canvas once web fonts finish loading so Script/Classic fonts look crisp
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          renderCertificateCanvas();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
