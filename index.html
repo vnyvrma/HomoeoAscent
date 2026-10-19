@@ -704,33 +704,74 @@
      * GOOGLE DRIVE AUTO-SAVE CONFIGURATION (Edit directly in code)
      * Each participant category (Student, Intern, Practitioner) routes its
      * generated certificate PDF into its own dedicated Google Drive folder ID.
+     * You can paste either the raw Folder ID or the full Google Drive Folder URL.
      *
-     * Companion Google Apps Script (Deploy -> New deployment -> Web app -> Anyone):
+     * Companion Google Apps Script (Code.gs):
+     * 1. Paste the script below in https://script.google.com
+     * 2. IMPORTANT: Select `authorizeDriveAccess` in the toolbar and click "Run"
+     *    once to grant Google Drive permissions!
+     * 3. Click Deploy -> New deployment -> Type: Web app ->
+     *    Execute as: Me -> Who has access: Anyone -> Deploy.
      * ------------------------------------------------------------------------
+     * var DEFAULT_FOLDERS = {
+     *   "Student": "PASTE_STUDENT_DRIVE_FOLDER_ID_OR_URL",
+     *   "Intern": "PASTE_INTERN_DRIVE_FOLDER_ID_OR_URL",
+     *   "Practitioner": "PASTE_PRACTITIONER_DRIVE_FOLDER_ID_OR_URL"
+     * };
+     *
+     * function extractFolderId(input) {
+     *   if (!input) return "";
+     *   var str = String(input).trim();
+     *   if (str.indexOf("PASTE_") !== -1 || str.indexOf("YOUR_") !== -1) return "";
+     *   var m = str.match(/[-\w]{25,}/);
+     *   return m ? m[0] : str;
+     * }
+     *
+     * // Run this function ONCE in the Apps Script editor to authorize DriveApp!
+     * function authorizeDriveAccess() {
+     *   var root = DriveApp.getRootFolder();
+     *   Logger.log("Drive access authorized successfully for: " + root.getName());
+     * }
+     *
      * function doPost(e) {
-     *   var data = JSON.parse(e.postData.contents);
-     *   var folderMap = {
-     *     "Student": data.folderId || "YOUR_STUDENT_DRIVE_FOLDER_ID",
-     *     "Intern": data.folderId || "YOUR_INTERN_DRIVE_FOLDER_ID",
-     *     "Practitioner": data.folderId || "YOUR_PRACTITIONER_DRIVE_FOLDER_ID"
-     *   };
-     *   var targetFolderId = folderMap[data.category] || folderMap["Student"];
-     *   var folder = DriveApp.getFolderById(targetFolderId);
-     *   var bytes = Utilities.base64Decode(data.pdfBase64);
-     *   var blob = Utilities.newBlob(bytes, "application/pdf", data.fileName);
-     *   var file = folder.createFile(blob);
-     *   return ContentService.createTextOutput(JSON.stringify({
-     *     status: "ok", fileId: file.getId(), category: data.category
-     *   })).setMimeType(ContentService.MimeType.JSON);
+     *   try {
+     *     var raw = e.postData ? e.postData.contents : "";
+     *     var data = JSON.parse(raw);
+     *     var category = data.category || "Student";
+     *     if (["Student", "Intern", "Practitioner"].indexOf(category) === -1) {
+     *       category = "Student";
+     *     }
+     *     var folderId = extractFolderId(data.folderId) || extractFolderId(DEFAULT_FOLDERS[category]);
+     *     var folder;
+     *     if (folderId) {
+     *       folder = DriveApp.getFolderById(folderId);
+     *     } else {
+     *       var fallbackName = "HOMOEOASCENT_2026_" + category;
+     *       var iter = DriveApp.getFoldersByName(fallbackName);
+     *       folder = iter.hasNext() ? iter.next() : DriveApp.createFolder(fallbackName);
+     *     }
+     *     var base64Data = String(data.pdfBase64 || "").replace(/^data:application\/pdf;[^,]*,/, "");
+     *     var bytes = Utilities.base64Decode(base64Data);
+     *     var fileName = data.fileName || ("HOMOEOASCENT_1.0_2026_" + category + "_" + (data.fullName || "Participant") + ".pdf");
+     *     var blob = Utilities.newBlob(bytes, "application/pdf", fileName);
+     *     var file = folder.createFile(blob);
+     *     return ContentService.createTextOutput(JSON.stringify({
+     *       status: "ok", fileId: file.getId(), category: category, folderName: folder.getName()
+     *     })).setMimeType(ContentService.MimeType.JSON);
+     *   } catch (err) {
+     *     return ContentService.createTextOutput(JSON.stringify({
+     *       status: "error", message: err.toString()
+     *     })).setMimeType(ContentService.MimeType.JSON);
+     *   }
      * }
      * ======================================================================== */
     const DRIVE_CONFIG = {
-      enabled: true, // Set to true after adding your Google Apps Script Web App URL below
-      webAppUrl: "https://script.google.com/macros/s/AKfycbzBsaTmhkFI_palXhiB2JtGwL9e_3Q2HPOcVTTKQvf2oVTRM4IEAnUs6rI-KZH6-pP02g/exec",
+      enabled: true, // Enabled by default! Just paste your Web App URL and Folder IDs (or full Folder URLs) below
+      webAppUrl: "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec",
       folders: {
-        Student: "1TqWtDMKjS222tP50D6mY8exrcGuUb0Py",
-        Intern: "1FvaDGcECX-ENgqYCNlNxjy6xhFYwb8Ng",
-        Practitioner: "1Qm5NFSCNrf7H7zzbCSl0nQR1KxMl38Xw"
+        Student: "PASTE_STUDENT_GOOGLE_DRIVE_FOLDER_ID_HERE",
+        Intern: "PASTE_INTERN_GOOGLE_DRIVE_FOLDER_ID_HERE",
+        Practitioner: "PASTE_PRACTITIONER_GOOGLE_DRIVE_FOLDER_ID_HERE"
       }
     };
 
@@ -1274,7 +1315,22 @@
     // ------------------------------------------------------------------------
     // 5. PDF Generation & Automatic Google Drive Folder Upload
     // ------------------------------------------------------------------------
-    function buildCertificatePdfInstance() {
+    function extractDriveFolderId(rawValue) {
+      if (!rawValue) return "";
+      const str = String(rawValue).trim();
+      if (!str || str.includes("PASTE_") || str.includes("YOUR_")) {
+        return "";
+      }
+      // Supports both full Google Drive folder URLs and raw Folder IDs
+      const folderUrlMatch = str.match(/folders\/([a-zA-Z0-9_-]{15,})/);
+      if (folderUrlMatch && folderUrlMatch[1]) return folderUrlMatch[1];
+      const idParamMatch = str.match(/[?&]id=([a-zA-Z0-9_-]{15,})/);
+      if (idParamMatch && idParamMatch[1]) return idParamMatch[1];
+      const genericIdMatch = str.match(/[-\w]{25,}/);
+      return genericIdMatch ? genericIdMatch[0] : str;
+    }
+
+    function buildCertificatePdfInstance(useCompactJpeg) {
       const canvas = document.getElementById("certificateCanvas");
       if (!canvas || !window.jspdf || !window.jspdf.jsPDF) return null;
       const { jsPDF } = window.jspdf;
@@ -1282,11 +1338,28 @@
       const pdf = new jsPDF({
         orientation: "landscape",
         unit: "mm",
-        format: "a4"
+        format: "a4",
+        compress: true
       });
-      const imgData = canvas.toDataURL("image/png", 1.0);
-      pdf.addImage(imgData, "PNG", 0, 0, 297, 210);
+      if (useCompactJpeg) {
+        // High-resolution JPEG keeps the PDF payload compact (~180 KB) so Google Apps Script POST never times out
+        const jpegData = canvas.toDataURL("image/jpeg", 0.95);
+        pdf.addImage(jpegData, "JPEG", 0, 0, 297, 210, undefined, "FAST");
+      } else {
+        const pngData = canvas.toDataURL("image/png", 1.0);
+        pdf.addImage(pngData, "PNG", 0, 0, 297, 210);
+      }
       return pdf;
+    }
+
+    function arrayBufferToBase64(buffer) {
+      let binary = "";
+      const bytes = new Uint8Array(buffer);
+      const chunkSize = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+      }
+      return btoa(binary);
     }
 
     function getCleanFileName(ext) {
@@ -1297,36 +1370,65 @@
     }
 
     async function uploadCertificatePdfToDrive() {
-      if (!DRIVE_CONFIG.enabled || !DRIVE_CONFIG.webAppUrl || DRIVE_CONFIG.webAppUrl.includes("YOUR_DEPLOYMENT_ID")) {
+      const url = (DRIVE_CONFIG.webAppUrl || "").trim();
+      if (!url || url.includes("YOUR_DEPLOYMENT_ID") || !url.startsWith("http")) {
+        console.warn("[Drive Upload] Skipped: Configure DRIVE_CONFIG.webAppUrl with your Google Apps Script /exec URL.");
         return;
       }
       try {
-        const pdf = buildCertificatePdfInstance();
+        renderCertificateCanvas();
+        const pdf = buildCertificatePdfInstance(true);
         if (!pdf) return;
-        const dataUri = pdf.output("datauristring");
-        const base64Pdf = dataUri.split(",")[1] || "";
-        const targetFolderId = DRIVE_CONFIG.folders[state.category] || DRIVE_CONFIG.folders.Student;
+
+        // Convert raw PDF ArrayBuffer directly to clean base64 (avoids dataURI prefix bugs)
+        const arrayBuf = pdf.output("arraybuffer");
+        const base64Pdf = arrayBufferToBase64(arrayBuf);
+
+        const rawFolder = (DRIVE_CONFIG.folders && DRIVE_CONFIG.folders[state.category]) || "";
+        const targetFolderId = extractDriveFolderId(rawFolder);
 
         const payload = {
           eventName: "HOMOEOASCENT 1.0 – 2026",
           fullName: state.fullName.trim(),
           email: state.email.trim(),
           category: state.category, // Strictly 'Student', 'Intern', or 'Practitioner'
-          folderId: targetFolderId,
+          folderId: targetFolderId, // Empty string if placeholder, allowing Code.gs DEFAULT_FOLDERS to work seamlessly
           claimNumber: state.userClaimNum,
           fileName: getCleanFileName("pdf"),
           pdfBase64: base64Pdf,
           timestamp: new Date().toISOString()
         };
 
-        await fetch(DRIVE_CONFIG.webAppUrl, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
+        // First try standard CORS POST (text/plain avoids CORS preflight on script.google.com)
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            redirect: "follow",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+          });
+          const resultText = await response.text();
+          try {
+            const resultJson = JSON.parse(resultText);
+            if (resultJson.status === "error") {
+              console.error("[Drive Upload Error from Apps Script]:", resultJson.message);
+            } else {
+              console.log("[Drive Upload Success]:", resultJson);
+            }
+          } catch (parseErr) {
+            console.log("[Drive Upload Response]:", resultText.slice(0, 200));
+          }
+        } catch (corsErr) {
+          // Fallback to opaque no-cors POST if browser blocks redirect read
+          await fetch(url, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+          });
+        }
       } catch (err) {
-        // Silent background fail so user flow is never interrupted
+        console.error("[Drive Upload Exception]:", err);
       }
     }
 
