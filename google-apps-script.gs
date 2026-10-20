@@ -1,3 +1,4 @@
+function myFunction() {
 /**
  * HOMOEOASCENT 1.0 – 2026 | Google Apps Script Backend
  * Routes generated certificate PDFs into separate Google Drive folders
@@ -128,4 +129,5 @@ function doPost(e) {
       message: err.toString()
     })).setMimeType(ContentService.MimeType.JSON);
   }
+}
 }
