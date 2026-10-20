@@ -25,9 +25,9 @@ function myFunction() {
  */
 
 var DEFAULT_FOLDERS = {
-  "Student": "PASTE_STUDENT_GOOGLE_DRIVE_FOLDER_ID_OR_URL_HERE",
-  "Intern": "PASTE_INTERN_GOOGLE_DRIVE_FOLDER_ID_OR_URL_HERE",
-  "Practitioner": "PASTE_PRACTITIONER_GOOGLE_DRIVE_FOLDER_ID_OR_URL_HERE"
+  "Student": "https://drive.google.com/drive/folders/1TqWtDMKjS222tP50D6mY8exrcGuUb0Py",
+  "Intern": "https://drive.google.com/drive/folders/1671zNAeHhPbRHLIhtLlLcTpb_PkAOB9R",
+  "Practitioner": "https://drive.google.com/drive/folders/1KsJ8Fm9vQc8UMs3i6h4tSgVfQ__QETWG"
 };
 
 /**
